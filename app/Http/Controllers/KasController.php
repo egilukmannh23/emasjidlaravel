@@ -35,8 +35,9 @@ class KasController extends Controller
         ]);
 
         $kas = Kas::where('masjid_id', auth()->user()->masjid_id)
-        ->orderBy('tanggal', 'desc')
+        ->orderBy('created_at', 'desc')
         ->first();
+        // ddd($kas);
         $saldoAkhir = 0;
         if($kas != null){
             if($requestData['jenis'] == 'masuk'){
@@ -49,11 +50,13 @@ class KasController extends Controller
             $saldoAkhir = $requestData['jumlah'];
         }
 
+
         if($saldoAkhir <= -1){
             flash('Data kas gagal di tambahkan. Saldo akhir di akhir transaksi tidak boleh kurang dari 0.')->error();
             return back();
         }
-    
+        
+        // ddd($requestData);
         $kas = new Kas();
         $kas->fill($requestData);
         $kas->masjid_id = auth()->user()->masjid_id;

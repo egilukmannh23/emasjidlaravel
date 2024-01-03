@@ -13,6 +13,7 @@ class Kas extends Model
         'tanggal',
         'keterangan',
         'jumlah', // Add this line to allow mass assignment for the 'tanggal' field
+        'jenis', // Add this line to allow mass assignment for the 'tanggal' field
         // Other fields in your model...
     ];
 }
