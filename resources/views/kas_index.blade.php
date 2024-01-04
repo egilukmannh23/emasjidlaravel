@@ -20,8 +20,8 @@
                     <th>Tanggal</th>
                     <th>kategori</th>
                     <th>Keterangan</th>
-                    <th>Jenis</th>
-                    <th>Jumlah</th>
+                    <th>Pemasukan</th>
+                    <th>Pengeluaran</th>
                     <th>Saldo Akhir</th>
                     <th>Di input oleh</th>
                     <th>Aksi</th>
@@ -34,8 +34,12 @@
                         <td>{{ $item->tanggal->translatedFormat('d-m-Y') }}</td>
                         <td>{{ $item->kategori ?? 'umum'}}</td>
                         <td>{{ $item->keterangan }}</td>
-                        <td>{{ $item->jenis }}</td>
-                        <td>{{ formatRupiah($item->jumlah, true) }}</td>
+                        <td>
+                            {{ $item->jenis == 'masuk' ? formatRupiah($item->jumlah) : '-' }}
+                        </td>
+                        <td>
+                            {{ $item->jenis == 'keluar' ? formatRupiah($item->jumlah) : '-' }}
+                        </td>
                         <td>{{ formatRupiah($item->saldo_akhir, true) }}</td>
                         <td>{{ $item->createdBy->name }}</td>
                         <td>

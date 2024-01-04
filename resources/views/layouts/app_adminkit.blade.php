@@ -144,7 +144,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav">
 						<li class="nav-item dropdown">
-							<h4 class="ml-2 fw-bold">{{ auth()->user()->masjid->nama}}</h4>
+							<h4 class="ml-2 fw-bold">{{ auth()->user()->masjid?->nama}}</h4>
 						</li>
 					</ul>
 					<ul class="navbar-nav navbar-align">
