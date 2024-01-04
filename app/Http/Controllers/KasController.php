@@ -17,7 +17,8 @@ class KasController extends Controller
     {
         // Form untuk membuat data baru
         $kas = new kas();
-        return view('kas_form', compact('kas'));
+        $saldoAkhir = Kas::SaldoAkhir();
+        return view('kas_form', compact('kas', 'saldoAkhir'));
     }
 
     public function store(Request $request)
@@ -34,21 +35,13 @@ class KasController extends Controller
             // 'created_by' => 'required',
         ]);
 
-        $kas = Kas::where('masjid_id', auth()->user()->masjid_id)
-        ->orderBy('created_at', 'desc')
-        ->first();
-        // ddd($kas);
-        $saldoAkhir = 0;
-        if($kas != null){
+        $requestData['jumlah'] = str_replace('.', '', $requestData['jumlah']);
+        $saldoAkhir = Kas::SaldoAkhir();
             if($requestData['jenis'] == 'masuk'){
-
-                $saldoAkhir = $kas->saldo_akhir + $requestData['jumlah'];
+                $saldoAkhir += $requestData['jumlah'];
             } else {
-                $saldoAkhir = $kas->saldo_akhir - $requestData['jumlah'];
+                $saldoAkhir -= $requestData['jumlah'];
             }
-        } else {
-            $saldoAkhir = $requestData['jumlah'];
-        }
 
 
         if($saldoAkhir <= -1){

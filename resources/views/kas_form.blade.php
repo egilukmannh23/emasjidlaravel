@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <h2>{{ isset($kas) ? 'Edit' : 'Tambah' }} Data Kas</h2>
+        <h4>Saldo Akhir Saat ini : {{ formatRupiah($saldoAkhir)}}</h4>
 
         {!! Form::model(
             $kas, [
@@ -34,15 +35,15 @@
         <div class="form-group">
     {!! Form::label('jenis', 'Jenis Transaksi') !!}
     <br>
-    <label>{!! Form::radio('jenis', 'masuk', true) !!} Masuk</label>
-    <label>{!! Form::radio('jenis', 'keluar') !!} Keluar</label>
+    <label>{!! Form::radio('jenis', 'masuk', true) !!} Pemasukan</label>
+    <label>{!! Form::radio('jenis', 'keluar') !!} Pengeluaran</label>
     <span class="text-danger">{{ $errors->first('jenis') }}</span>
 </div>
 
 
         <div class="form-group mb-3">
-            {!! Form::label('jumlah', 'Jumlah') !!}
-            {!! Form::text('jumlah', null, ['class' => 'form-control']) !!}
+            {!! Form::label('jumlah', 'Jumlah Transaksi') !!}
+            {!! Form::text('jumlah', null, ['class' => 'form-control rupiah']) !!}
             <span class="text-danger">{{ $errors->first('jumlah') }}</span>
         </div>
 

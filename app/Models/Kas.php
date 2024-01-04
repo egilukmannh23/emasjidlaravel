@@ -16,4 +16,25 @@ class Kas extends Model
         'jenis', // Add this line to allow mass assignment for the 'tanggal' field
         // Other fields in your model...
     ];
+    protected $casts = [
+        'tanggal' => 'datetime:d-m-Y H:i'
+    ];
+
+    public function masjid()
+    {
+        return $this->belongsTo(Masjid::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function scopeSaldoAkhir($query, $masjidId = null)
+    {
+        $masjidId = $masjidId ?? auth()->user()->masjid_id;
+        return $query->where('masjid_id', auth()->user()->masjid_id)
+        ->orderBy('created_at', 'desc')
+        ->value('saldo_akhir');
+    }
 }

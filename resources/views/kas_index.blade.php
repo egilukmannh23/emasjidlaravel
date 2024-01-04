@@ -17,14 +17,13 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Masjid ID</th>
                     <th>Tanggal</th>
                     <th>kategori</th>
                     <th>Keterangan</th>
                     <th>Jenis</th>
                     <th>Jumlah</th>
                     <th>Saldo Akhir</th>
-                    <th>Created By</th>
+                    <th>Di input oleh</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -32,14 +31,13 @@
                 @forelse($kas as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
-                        <td>{{ $item->masjid_id }}</td>
-                        <td>{{ $item->tanggal }}</td>
-                        <td>{{ $item->kategori }}</td>
+                        <td>{{ $item->tanggal->translatedFormat('d-m-Y') }}</td>
+                        <td>{{ $item->kategori ?? 'umum'}}</td>
                         <td>{{ $item->keterangan }}</td>
                         <td>{{ $item->jenis }}</td>
-                        <td>{{ $item->jumlah }}</td>
-                        <td>{{ $item->saldo_akhir }}</td>
-                        <td>{{ $item->created_by }}</td>
+                        <td>{{ formatRupiah($item->jumlah, true) }}</td>
+                        <td>{{ formatRupiah($item->saldo_akhir, true) }}</td>
+                        <td>{{ $item->createdBy->name }}</td>
                         <td>
                             <a href="{{ route('kas.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('kas.destroy', $item->id) }}" method="POST" class="d-inline">
