@@ -18,7 +18,8 @@ class KasController extends Controller
         // Form untuk membuat data baru
         $kas = new kas();
         $saldoAkhir = Kas::SaldoAkhir();
-        return view('kas_form', compact('kas', 'saldoAkhir'));
+        $disable = [];
+        return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
     }
 
     public function store(Request $request)
@@ -59,30 +60,28 @@ class KasController extends Controller
 
         return redirect()->route('kas.index')->with('success', 'Data Berhasil Di Tambahkan');
     }
+
+    public function edit($id)
+    {
+        $kas = Kas::findOrFail($id);
+        $saldoAkhir = Kas::SaldoAkhir();
+        $disable = ['disabled'];
+        return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
+    }
     
     public function update(Request $request, $id)
     {
         // Validasi input
-        $request->validate([
-            'masjid_id' => 'required',
-            'tanggal' => 'required',
+       $requestData =  $request->validate([
+            'kategori' => 'nullable',
             'keterangan' => 'required',
-            'jenis' => 'required',
-            'jumlah' => 'required',
-            'saldo_akhir' => 'required',
-            'created_by' => 'required',
         ]);
-    
-        // Hitung saldo akhir berdasarkan jenis transaksi
-        $saldoAkhir = $request->jenis == 'masuk' ? $request->saldo_akhir + $request->jumlah : $request->saldo_akhir - $request->jumlah;
-    
-        // Tambahkan nilai saldo_akhir ke dalam input request
-        $request->merge(['saldo_akhir' => $saldoAkhir]);
-    
-        // Update data di database
-        Kas::findOrFail($id)->update($request->all());
-    
-        return redirect()->route('kas.index')->with('success', 'Data kas berhasil diperbarui.');
+
+        $kas = Kas::findOrFail($id);
+        $kas->fill($requestData);
+        $kas->save();
+        flash('Data Sudah Di perbarui');
+        return redirect()->route('kas.index');
     }
     
 
@@ -94,23 +93,23 @@ class KasController extends Controller
         return redirect()->route('kas.index')->with('success', 'Data kas berhasil dihapus.');
     }
 
-    private function calculateSaldoAkhir($tanggal)
-    {
-        $transactions = Kas::where('tanggal', '<=', $tanggal)
-        ->orderBy('tanggal')
-        ->orderBy('id')
-        ->get();
+    // private function calculateSaldoAkhir($tanggal)
+    // {
+    //     $transactions = Kas::where('tanggal', '<=', $tanggal)
+    //     ->orderBy('tanggal')
+    //     ->orderBy('id')
+    //     ->get();
 
-        $saldo = 0;
+    //     $saldo = 0;
 
-        foreach ($transactions as $transaction ){
-            if($transaction->jenis == 'masuk'){
-                $saldo += $transaction->jumlah;
-            } else {
-                $saldo -= $transaction->jumlah;
-            }
-        }
+    //     foreach ($transactions as $transaction ){
+    //         if($transaction->jenis == 'masuk'){
+    //             $saldo += $transaction->jumlah;
+    //         } else {
+    //             $saldo -= $transaction->jumlah;
+    //         }
+    //     }
 
-        return $saldo;
-    }
+    //     return $saldo;
+    // }
 }

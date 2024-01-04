@@ -16,7 +16,7 @@
 
         <div class="form-group">
             {!! Form::label('tanggal', 'Tanggal') !!}
-            {!! Form::date('tanggal', null, ['class' => 'form-control']) !!}
+            {!! Form::date('tanggal', $kas->tanggal ?? now(), ['class' => 'form-control'] + $disable) !!}
             <span class="text-danger">{{ $errors->first('tanggal') }}</span>
         </div>
 
@@ -32,18 +32,21 @@
             <span class="text-danger">{{ $errors->first('keterangan') }}</span>
         </div>
 
-        <div class="form-group">
-    {!! Form::label('jenis', 'Jenis Transaksi') !!}
-    <br>
-    <label>{!! Form::radio('jenis', 'masuk', true) !!} Pemasukan</label>
-    <label>{!! Form::radio('jenis', 'keluar') !!} Pengeluaran</label>
-    <span class="text-danger">{{ $errors->first('jenis') }}</span>
-</div>
+                <div class="form-check">
+                    {!! Form::radio('jenis', 'keluar', null, ['id' => 'jenis_keluar', 'class' => 'form-check-input' ] + $disable) !!}
+                    {!! Form::label('jenis_keluar', 'pemasukan', ['class' => 'form-check-label']) !!}
+                    <span class="text-danger">{{ $errors->first('jenis') }}</span>
+                </div>
+                <div class="form-check">
+                    {!! Form::radio('jenis', 'keluar', null, ['id' => 'jenis_keluar', 'class' => 'form-check-input' ] + $disable) !!}
+                    {!! Form::label('jenis_keluar', 'pengeluaran', ['class' => 'form-check-label']) !!}
+                    <span class="text-danger">{{ $errors->first('jenis') }}</span>
+                </div>
 
 
         <div class="form-group mb-3">
             {!! Form::label('jumlah', 'Jumlah Transaksi') !!}
-            {!! Form::text('jumlah', null, ['class' => 'form-control rupiah']) !!}
+            {!! Form::text('jumlah', null, ['class' => 'form-control rupiah'] + $disable) !!}
             <span class="text-danger">{{ $errors->first('jumlah') }}</span>
         </div>
 
