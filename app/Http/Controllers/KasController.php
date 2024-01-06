@@ -60,6 +60,12 @@ class KasController extends Controller
 
         return redirect()->route('kas.index')->with('success', 'Data Berhasil Di Tambahkan');
     }
+<<<<<<< HEAD
+    public function edit($id){
+        $kas = Kas::findOrfail($id);
+        $saldoAkhir =Kas::saldoAkhir();
+        return view('kas_form',compact('kas','saldoAkhir'));
+=======
 
     public function edit($id)
     {
@@ -67,6 +73,7 @@ class KasController extends Controller
         $saldoAkhir = Kas::SaldoAkhir();
         $disable = ['disabled'];
         return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
+>>>>>>> 84ccb807e1fb91b845f90be428f4506383966830
     }
     
     public function update(Request $request, $id)
