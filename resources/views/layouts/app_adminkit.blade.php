@@ -27,7 +27,7 @@
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.html">
-          <span class="align-middle">DATA MASJID</span>
+          <span class="align-middle">Data Masjid</span>
         </a>
 
 				<ul class="sidebar-nav">
@@ -70,12 +70,12 @@
             </a>
 					</li>
 
-					
+
 				</ul>
 
 				<div class="sidebar-cta">
 					<div class="sidebar-cta-content">
-						
+
 					</div>
 				</div>
 			</div>
@@ -95,9 +95,7 @@
 					</ul>
 					<ul class="navbar-nav navbar-align">
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
-								<div class="position-relative">
-									
+							
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                 <i class="align-middle" data-feather="settings"></i>

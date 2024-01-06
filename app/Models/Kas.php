@@ -37,7 +37,9 @@ class Kas extends Model
         ->orderBy('created_at', 'desc')
         ->value('saldo_akhir') ?? 0;
     }
-    public function scopeUserMasjid($q){
-        return $q -> where('masjid_id', auth()->user()->masjid_id);
+
+    public function scopeUserMasjid($q)
+    {
+        return $q->where('masjid_id', auth()->user()->masjid_id);
     }
 }
