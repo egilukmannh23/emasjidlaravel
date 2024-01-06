@@ -22,7 +22,6 @@
                     <th>Keterangan</th>
                     <th>Pemasukan</th>
                     <th>Pengeluaran</th>
-                    <th>Saldo Akhir</th>
                     <th>Di input oleh</th>
                     <th>Aksi</th>
                 </tr>
@@ -40,7 +39,6 @@
                         <td>
                             {{ $item->jenis == 'keluar' ? formatRupiah($item->jumlah) : '-' }}
                         </td>
-                        <td>{{ formatRupiah($item->saldo_akhir, true) }}</td>
                         <td>{{ $item->createdBy->name }}</td>
                         <td>
                             <a href="{{ route('kas.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -62,6 +60,7 @@
                 @endforelse
             </tbody>
         </table>
+        <h1>Saldo Akhir : Rp. {{formatRupiah($saldoAkhir)}}</h1>
         {{ $kas->links() }}
         </div>
     </div>

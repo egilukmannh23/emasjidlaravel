@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kas;
+use Carbon\Carbon;
 
 class KasController extends Controller
 {
     public function index()
     {
         $kas = Kas::UserMasjid()->latest()->paginate(50);
-        return view('kas_index', compact('kas'));
+        $saldoAkhir = Kas::SaldoAkhir();
+        return view('kas_index', compact('kas', 'saldoAkhir'));
     }
 
     public function create()
@@ -35,6 +37,13 @@ class KasController extends Controller
             // 'saldo_akhir' => 'required',
             // 'created_by' => 'required',
         ]);
+        $tanggalTransaksi = Carbon::parse($requestData['tanggal']);
+        $tahunBulanTransaksi = $tanggalTransaksi->format('Ym');
+        $tahunBulanSekarang = Carbon::now()->format('Ym');
+        if($tahunBulanTransaksi != $tahunBulanSekarang){
+            flash('Data gagal di tambahkan. Transaksi hanya bisa dilakukan untuk tanggal dan bulan saat ini!!')->error();
+            return back();
+        }
 
         $requestData['jumlah'] = str_replace('.', '', $requestData['jumlah']);
         $saldoAkhir = Kas::SaldoAkhir();
@@ -55,17 +64,11 @@ class KasController extends Controller
         $kas->fill($requestData);
         $kas->masjid_id = auth()->user()->masjid_id;
         $kas->created_by = auth()->user()->id;
-        $kas->saldo_akhir = $saldoAkhir;
         $kas->save();
+        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
 
         return redirect()->route('kas.index')->with('success', 'Data Berhasil Di Tambahkan');
     }
-<<<<<<< HEAD
-    public function edit($id){
-        $kas = Kas::findOrfail($id);
-        $saldoAkhir =Kas::saldoAkhir();
-        return view('kas_form',compact('kas','saldoAkhir'));
-=======
 
     public function edit($id)
     {
@@ -73,7 +76,6 @@ class KasController extends Controller
         $saldoAkhir = Kas::SaldoAkhir();
         $disable = ['disabled'];
         return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
->>>>>>> 84ccb807e1fb91b845f90be428f4506383966830
     }
     
     public function update(Request $request, $id)
@@ -82,11 +84,23 @@ class KasController extends Controller
        $requestData =  $request->validate([
             'kategori' => 'nullable',
             'keterangan' => 'required',
+            'jumlah' => 'required',
         ]);
 
+      $jumlah =str_replace('.', '', $requestData['jumlah']);
+        $saldoAkhir = Kas::SaldoAkhir();
         $kas = Kas::findOrFail($id);
+        if ($kas->jenis == 'masuk'){
+            $saldoAkhir -= $kas->jumlah;
+        }
+        if ($kas->jenis == 'keluar'){
+            $saldoAkhir += $kas->jumlah;
+        }
+        $saldoAkhir = $saldoAkhir + $jumlah;
+        $requestData['jumlah'] = $jumlah;
         $kas->fill($requestData);
         $kas->save();
+        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         flash('Data Sudah Di perbarui');
         return redirect()->route('kas.index');
     }
@@ -96,11 +110,6 @@ class KasController extends Controller
     {
 // Hapus data dari database
 $kas = Kas::findOrFail($id);
-$kas->keterangan = 'dihapus oleh' . auth()->user()->name;
-$kas->save();
-
-$kasBaru = $kas->replicate();
-$kasBaru->keterangan = 'perbaikan data id ke' . $kas->id;
 $saldoAkhir = Kas::saldoAkhir();
 if($kas->jenis =='masuk'){
     $saldoAkhir -= $kas-> jumlah;
@@ -108,8 +117,9 @@ if($kas->jenis =='masuk'){
 if($kas->jenis =='keluar'){
     $saldoAkhir += $kas-> jumlah;
 }
-$kasBaru->saldo_akhir = $saldoAkhir;
-$kasBaru->save();
+
+$kas->delete();
+auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
 flash('data berhasil disimpan');
 return redirect()->route('kas.index');
     }

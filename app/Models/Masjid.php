@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Masjid extends Model
 {
     use HasFactory;
-    protected $table = 'masjid';
+    protected $table = 'masjids';
     protected $fillable = [
         'saldo_akhir',
     ];
