@@ -9,7 +9,7 @@ class KasController extends Controller
 {
     public function index()
     {
-        $kas = Kas::latest()->paginate(50);
+        $kas = kas::UserMasjid()->latest()->paginate(50);
         return view('kas_index', compact('kas'));
     }
 
@@ -58,6 +58,11 @@ class KasController extends Controller
         $kas->save();
 
         return redirect()->route('kas.index')->with('success', 'Data Berhasil Di Tambahkan');
+    }
+    public function edit($id){
+        $kas = Kas::findOrfail($id);
+        $saldoAkhir =Kas::saldoAkhir();
+        return view('kas_form',compact('kas','saldoAkhir'));
     }
     
     public function update(Request $request, $id)
